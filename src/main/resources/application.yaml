@@ -12,8 +12,9 @@ ktor:
       password: "postgrestest"
 
 jwt:
-  domain: "https://jwt-provider-domain/"
-  audience: "jwt-audience"
-  realm: "ktor sample app"
+  secret: "hKGWWldsCsNm+N3Ix2cwFYXEnvDTXFwaVxJeJMcGFzo=" # Add dotenv!
+  issuer: "com.example"
+  audience: "com.example.audience"
+  realm: "Access to 'com.example'"
 
 
