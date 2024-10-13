@@ -19,6 +19,7 @@ class UserRepository {
                 it[last_name] = user.lastName
                 it[createdAt] = LocalDateTime.now()
                 it[updatedAt] = LocalDateTime.now()
+                it[lastLogoutTime] = user.lastLogoutTime
             } get Users.id
         }
         return user.copy(id = id)
@@ -54,6 +55,14 @@ class UserRepository {
         }
     }
 
+    fun updateLastLogoutTime(userId: Int, lastLogoutTime: LocalDateTime) {
+        transaction {
+            Users.update({ Users.id eq userId}) {
+                it[Users.lastLogoutTime] = lastLogoutTime
+            }
+        }
+    }
+
     fun deleteUser(userId: Int) {
         transaction {
             Users.deleteWhere { Users.id eq userId }
@@ -69,7 +78,8 @@ class UserRepository {
             firstName = row[Users.firstName],
             lastName = row[Users.last_name],
             createdAt = row[Users.createdAt],
-            updatedAt = row[Users.updatedAt]
+            updatedAt = row[Users.updatedAt],
+            lastLogoutTime = row[Users.lastLogoutTime]
         )
     }
 }

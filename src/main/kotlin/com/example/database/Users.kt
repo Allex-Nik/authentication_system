@@ -14,6 +14,7 @@ object Users : Table("users") {
     val last_name = varchar("last_name", 50).nullable()
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
     val updatedAt = datetime("updated_at").defaultExpression(CurrentDateTime)
+    val lastLogoutTime = datetime("last_logout_time").nullable()
 
     override val primaryKey = PrimaryKey(id)
 }

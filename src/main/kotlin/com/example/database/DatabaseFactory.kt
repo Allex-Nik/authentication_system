@@ -1,9 +1,14 @@
 package com.example.database
 
+import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.flywaydb.core.Flyway
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import java.sql.Connection
+
 
 object DatabaseFactory {
     fun init(environment: ApplicationEnvironment) {
@@ -13,6 +18,14 @@ object DatabaseFactory {
         val dbUser = config.property("user").getString()
         val dbPassword = config.property("password").getString()
 
+        val flyway = Flyway.configure()
+            .dataSource(jdbcURL, dbUser, dbPassword)
+            .driver(driverClassName)
+            .baselineOnMigrate(true)
+            .load()
+
+        flyway.migrate()
+
         Database.connect(
             url = jdbcURL,
             driver = driverClassName,
@@ -20,8 +33,6 @@ object DatabaseFactory {
             password = dbPassword
         )
 
-        transaction {
-            SchemaUtils.create(Users)
-        }
+        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_REPEATABLE_READ
     }
 }

@@ -7,11 +7,14 @@ import com.example.security.Hashing
 import com.example.models.User
 
 import io.ktor.http.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
+import java.util.*
 
 // User registration
 @Serializable
@@ -88,10 +91,28 @@ fun Route.loginRoute(userRepository: UserRepository) {
             .withAudience(audience)
             .withIssuer(issuer)
             .withClaim("username", user.username)
-            .withExpiresAt(java.util.Date(expiresIn))
+            .withIssuedAt(Date(System.currentTimeMillis()))
+            .withExpiresAt(Date(expiresIn))
             .sign(Algorithm.HMAC256(secret))
 
         call.respond(AuthResponse(token))
+    }
+}
+
+//User logout
+fun Route.logoutRoute(userRepository: UserRepository) {
+    authenticate("auth-jwt") {
+        post("/logout") {
+            val principal = call.principal<JWTPrincipal>()
+            val username = principal!!.payload.getClaim("username").asString()
+            val user = userRepository.findUserByUsername(username)
+            if (user != null) {
+                userRepository.updateLastLogoutTime(user.id, LocalDateTime.now())
+                call.respond(HttpStatusCode.OK, "User logged out successfully")
+            } else {
+                call.respond(HttpStatusCode.NotFound, "User not found")
+            }
+        }
     }
 }
 
@@ -99,5 +120,6 @@ fun Route.authRoutes(userRepository: UserRepository) {
     route("/auth") {
         registerRoute(userRepository)
         loginRoute(userRepository)
+        logoutRoute(userRepository)
     }
 }

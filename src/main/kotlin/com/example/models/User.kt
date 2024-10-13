@@ -13,5 +13,6 @@ data class User(
     val firstName: String? = null,
     val lastName: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val createdAt: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class) val updatedAt: LocalDateTime
+    @Serializable(with = LocalDateTimeSerializer::class) val updatedAt: LocalDateTime,
+    @Serializable(with = LocalDateTimeSerializer::class) val lastLogoutTime: LocalDateTime? = null
 )
