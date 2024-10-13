@@ -30,6 +30,8 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-java-time")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
