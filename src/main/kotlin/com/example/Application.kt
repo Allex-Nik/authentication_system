@@ -8,6 +8,8 @@ import com.example.routes.registerRoute
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.Database
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.http.*
 
 
 
@@ -19,8 +21,17 @@ fun Application.module() {
 
     configureMonitoring()
     configureSerialization()
-    configureDatabases()
+//    configureDatabases()
     configureSecurity()
+    install(CORS) {
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Delete)
+        allowHeader(HttpHeaders.ContentType)
+        allowCredentials = true
+        //anyHost()
+    }
     configureRouting()
 
     DatabaseFactory.init(environment)

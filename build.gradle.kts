@@ -31,6 +31,7 @@ dependencies {
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.ktor:ktor-server-call-logging-jvm")
     implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-server-cors-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
 //    implementation("org.jetbrains.kotlinx:kotlinx-serialization-java-time")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")

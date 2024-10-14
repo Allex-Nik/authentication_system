@@ -12,22 +12,17 @@ fun Application.configureRouting() {
     val userRepository = UserRepository()
 
     routing {
+        authRoutes(userRepository)
+        userRoutes(userRepository)
 //        staticFiles("/", File("frontend")) {
 //            default("index.html")
 //        }
-//        staticFiles("/", File("frontend")) {
-//            default("index.html")
-//        }
-//        static("/") {
-//            resources("frontend")
-//            defaultResource("frontend/index.html")
-//        }
+
         static("/") {
             staticRootFolder = File("src/main/resources/frontend")
             files(".")
             default("index.html")
         }
-        authRoutes(userRepository)
-        userRoutes(userRepository)
+
     }
 }
