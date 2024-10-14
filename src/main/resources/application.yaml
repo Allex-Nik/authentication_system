@@ -8,11 +8,11 @@ ktor:
     database:
       driver: "org.postgresql.Driver"
       url: "jdbc:postgresql://localhost:5432/auth_system"
-      user: "postgres"
-      password: "postgrestest"
+      user: "$DB_USER"
+      password: "$DB_PASSWORD"
 
 jwt:
-  secret: "hKGWWldsCsNm+N3Ix2cwFYXEnvDTXFwaVxJeJMcGFzo=" # Add dotenv!
+  secret: "$JWT_SECRET"
   issuer: "com.example"
   audience: "com.example.audience"
   realm: "Access to 'com.example'"
