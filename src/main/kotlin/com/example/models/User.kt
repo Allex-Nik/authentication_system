@@ -3,6 +3,8 @@ package com.example.models
 import java.time.LocalDateTime
 import kotlinx.serialization.Serializable
 import com.example.serialization.LocalDateTimeSerializer
+import kotlinx.serialization.Contextual
+import java.time.Instant
 
 @Serializable
 data class User(

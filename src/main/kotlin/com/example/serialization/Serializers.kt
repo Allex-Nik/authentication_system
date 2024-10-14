@@ -1,5 +1,7 @@
 package com.example.serialization
 
+import java.time.Instant
+
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -7,21 +9,40 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 
 //@OptIn(ExperimentalSerializationApi::class)
 //@kotlinx.serialization.Serializer(forClass = LocalDateTime::class)
+//class LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+//    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+//
+//    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+//
+//    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+//        encoder.encodeString(value.format(formatter))
+//    }
+//
+//    override fun deserialize(decoder: Decoder): LocalDateTime {
+//        return LocalDateTime.parse(decoder.decodeString(), formatter)
+//    }
+//}
+
 class LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC)
 
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.format(formatter))
+        val instant = value.toInstant(ZoneOffset.UTC)
+        val formatted = formatter.format(instant)
+        encoder.encodeString(formatted)
     }
 
     override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), formatter)
+        val string = decoder.decodeString()
+        val instant = Instant.parse(string)
+        return instant.atZone(ZoneOffset.UTC).toLocalDateTime()
     }
 }

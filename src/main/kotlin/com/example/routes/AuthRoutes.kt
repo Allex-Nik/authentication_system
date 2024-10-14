@@ -15,6 +15,10 @@ import io.ktor.server.request.*
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.*
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+
 
 // User registration
 @Serializable
@@ -87,12 +91,15 @@ fun Route.loginRoute(userRepository: UserRepository) {
         val audience = jwtConfig.property("audience").getString()
         val expiresIn = System.currentTimeMillis() + 60000 * 60 * 24 // 24 hours
 
+        val issuedAt = LocalDateTime.now(ZoneOffset.UTC)
+        val expiresAt = issuedAt.plusHours(24)
+
         val token = JWT.create()
             .withAudience(audience)
             .withIssuer(issuer)
             .withClaim("username", user.username)
-            .withIssuedAt(Date(System.currentTimeMillis()))
-            .withExpiresAt(Date(expiresIn))
+            .withIssuedAt(Date.from(issuedAt.toInstant(ZoneOffset.UTC)))
+            .withExpiresAt(Date.from(expiresAt.toInstant(ZoneOffset.UTC)))
             .sign(Algorithm.HMAC256(secret))
 
         call.respond(AuthResponse(token))
@@ -107,7 +114,7 @@ fun Route.logoutRoute(userRepository: UserRepository) {
             val username = principal!!.payload.getClaim("username").asString()
             val user = userRepository.findUserByUsername(username)
             if (user != null) {
-                userRepository.updateLastLogoutTime(user.id, LocalDateTime.now())
+                userRepository.updateLastLogoutTime(user.id, LocalDateTime.now(ZoneOffset.UTC))
                 call.respond(HttpStatusCode.OK, "User logged out successfully")
             } else {
                 call.respond(HttpStatusCode.NotFound, "User not found")

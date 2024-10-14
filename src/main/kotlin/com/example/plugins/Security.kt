@@ -29,21 +29,26 @@ fun Application.configureSecurity() {
             )
             validate { credential ->
                 val username = credential.payload.getClaim("username").asString()
-                val tokenIssuedAt = credential.payload.issuedAt?.toInstant()
+                val tokenIssuedAt = credential.payload.issuedAt?.toInstant()?.atZone(ZoneOffset.UTC)?.toLocalDateTime()
                 if (username != null && tokenIssuedAt != null) {
                     val user = userRepository.findUserByUsername(username)
                     if (user != null) {
-                        val lastLogoutTime = user.lastLogoutTime?.toInstant(ZoneOffset.UTC)
-                        if (lastLogoutTime == null || tokenIssuedAt.isAfter(lastLogoutTime)) {
+                        val lastLogoutTime = user.lastLogoutTime
+                        application.log.debug("Validating token for user $username")
+                        application.log.debug("tokenIssuedAt: $tokenIssuedAt")
+                        application.log.debug("lastLogoutTime: $lastLogoutTime")
+                        if (lastLogoutTime == null || !tokenIssuedAt.isBefore(lastLogoutTime)) {
                             JWTPrincipal(credential.payload)
-                        }
-                        else {
-                            null // Token is invalid: user logged out
+                        } else {
+                            application.log.debug("Token is invalid, user has logged out")
+                            null
                         }
                     } else {
-                        null // User not found
+                        application.log.debug("User not found")
+                        null
                     }
                 } else {
+                    application.log.debug("Invalid token data")
                     null
                 }
             }
