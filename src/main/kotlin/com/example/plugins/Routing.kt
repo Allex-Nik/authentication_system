@@ -14,15 +14,8 @@ fun Application.configureRouting() {
     routing {
         authRoutes(userRepository)
         userRoutes(userRepository)
-//        staticFiles("/", File("frontend")) {
-//            default("index.html")
-//        }
-
-        static("/") {
-            staticRootFolder = File("src/main/resources/frontend")
-            files(".")
+        staticFiles("/", File("src/main/resources/frontend")) {
             default("index.html")
         }
-
     }
 }

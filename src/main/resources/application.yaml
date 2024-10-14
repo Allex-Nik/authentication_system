@@ -16,5 +16,3 @@ jwt:
   issuer: "com.example"
   audience: "com.example.audience"
   realm: "Access to 'com.example'"
-
-

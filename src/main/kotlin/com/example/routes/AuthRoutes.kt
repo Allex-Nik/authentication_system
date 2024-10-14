@@ -2,22 +2,20 @@ package com.example.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.models.User
 import com.example.repositories.UserRepository
 import com.example.security.Hashing
-import com.example.models.User
 
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.routing.*
-import io.ktor.server.response.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.*
-import java.time.Instant
 import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
 
 
 // User registration

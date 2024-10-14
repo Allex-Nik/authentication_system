@@ -1,13 +1,8 @@
 package com.example.database
 
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.javatime.timestamp
-
-
-
-
+import org.jetbrains.exposed.sql.Table
 
 
 object Users : Table("users") {
