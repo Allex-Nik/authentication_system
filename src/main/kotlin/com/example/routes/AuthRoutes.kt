@@ -18,7 +18,10 @@ import java.util.*
 import java.time.ZoneOffset
 
 
-// User registration
+/**
+ * Data class representing a registration request.
+ * Includes necessary information to register a user.
+ */
 @Serializable
 data class RegisterRequest(
     val username: String,
@@ -28,6 +31,13 @@ data class RegisterRequest(
     val lastName: String? = null
 )
 
+/**
+ * Route handler for user registration.
+ * Receives the registration data, checks if the user already exists,
+ * hashes the password, and creates a new user in the database.
+ *
+ * @param userRepository The repository used to manage user operations.
+ */
 fun Route.registerRoute(userRepository: UserRepository) {
     post("/register") {
         val request = call.receive<RegisterRequest>()
@@ -59,18 +69,31 @@ fun Route.registerRoute(userRepository: UserRepository) {
     }
 }
 
-//User login
+/**
+ * Data class representing a login request.
+ * Contains username and password fields for user authentication.
+ */
 @Serializable
 data class LoginRequest(
     val username: String,
     val password: String
 )
 
+/**
+ * Data class representing an authentication response.
+ * Contains the JWT token that the user will receive upon successful login.
+ */
 @Serializable
 data class AuthResponse(
     val token: String
 )
 
+/**
+ * Route handler for user login.
+ * Verifies the username and password, generates a JWT token if valid, and returns the token to the client.
+ *
+ * @param userRepository The repository used to manage user operations.
+ */
 fun Route.loginRoute(userRepository: UserRepository) {
     post("/login") {
         val request = call.receive<LoginRequest>()
@@ -104,7 +127,12 @@ fun Route.loginRoute(userRepository: UserRepository) {
     }
 }
 
-//User logout
+/**
+ * Route handler for user logout.
+ * Validates the JWT token, and if the token is valid, updates the last logout time for the user in the database.
+ *
+ * @param userRepository The repository used to manage user operations.
+ */
 fun Route.logoutRoute(userRepository: UserRepository) {
     authenticate("auth-jwt") {
         post("/logout") {
@@ -121,6 +149,11 @@ fun Route.logoutRoute(userRepository: UserRepository) {
     }
 }
 
+/**
+ * Groups the user-related authentication routes into a single routing structure.
+ *
+ * @param userRepository The repository used to manage user operations.
+ */
 fun Route.authRoutes(userRepository: UserRepository) {
     route("/auth") {
         registerRoute(userRepository)

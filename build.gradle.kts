@@ -47,6 +47,20 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("org.flywaydb:flyway-core:9.22.3")
+    testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    //testImplementation("io.ktor:ktor-server-tests-jvm")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("io.mockk:mockk:1.12.5")
+    testImplementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    testImplementation("org.postgresql:postgresql:42.4.0")
+
+    testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-server-test-host")
+    testImplementation("io.ktor:ktor-client-content-negotiation")
+    testImplementation("io.ktor:ktor-serialization-kotlinx-json")
 }
+

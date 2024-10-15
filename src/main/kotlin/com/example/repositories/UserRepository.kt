@@ -7,8 +7,19 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.time.LocalDateTime
 
+/**
+ * UserRepository provides methods for interacting with the Users table in the database.
+ * It allows to add, retrieve, update, delete users, and manage user-specific data
+ * like their last logout time.
+ */
 class UserRepository {
 
+    /**
+     * Adds a new user to the database.
+     *
+     * @param user The User object to be added.
+     * @return The added user with the newly generated ID.
+     */
     fun addUser(user : User): User {
         val id = transaction {
             Users.insert {
@@ -25,6 +36,12 @@ class UserRepository {
         return user.copy(id = id)
     }
 
+    /**
+     * Finds a user by their username.
+     *
+     * @param username The username to search for.
+     * @return The user if found, null if not found.
+     */
     fun findUserByUsername(username: String): User? {
         return transaction {
             Users.selectAll()
@@ -34,6 +51,12 @@ class UserRepository {
         }
     }
 
+    /**
+     * Finds a user by their email.
+     *
+     * @param email The email to search for.
+     * @return The user if found, null if not found.
+     */
     fun findUserByEmail(email: String): User? {
         return transaction {
             Users.selectAll()
@@ -43,6 +66,11 @@ class UserRepository {
         }
     }
 
+    /**
+     * Updates the user's information in the database.
+     *
+     * @param user The updated User object.
+     */
     fun updateUser(user: User) {
         transaction {
             Users.update({ Users.id eq user.id }) {
@@ -55,6 +83,12 @@ class UserRepository {
         }
     }
 
+    /**
+     * Updates the last logout time for a user.
+     *
+     * @param userId The ID of the user.
+     * @param lastLogoutTime The time of the last logout.
+     */
     fun updateLastLogoutTime(userId: Int, lastLogoutTime: LocalDateTime) {
         transaction {
             Users.update({ Users.id eq userId}) {
@@ -63,12 +97,23 @@ class UserRepository {
         }
     }
 
+    /**
+     * Deletes a user from the database by their ID.
+     *
+     * @param userId The ID of the user to delete.
+     */
     fun deleteUser(userId: Int) {
         transaction {
             Users.deleteWhere { Users.id eq userId }
         }
     }
 
+    /**
+     * Converts a ResultRow from the database into a User object.
+     *
+     * @param row The database result row.
+     * @return The User object mapped from the row.
+     */
     private fun toUser(row: ResultRow) : User {
         return User(
             id = row[Users.id],

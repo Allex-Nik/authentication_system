@@ -1,0 +1,15 @@
+#ktor:
+#  deployment:
+#    port: 8081
+#
+#  database:
+#    driver: "org.postgresql.Driver"
+#    url: "jdbc:postgresql://localhost:5432/auth_system_test"
+#    user: "test_user"
+#    password: "test_password"
+#
+#  jwt:
+#    secret: "rFv64RUkSIzK4HAYJqeApVVVYL/RevxKfSaE9+tby4c="
+#    issuer: "com.example"
+#    audience: "com.example.audience"
+#    realm: "Access to 'com.example'"

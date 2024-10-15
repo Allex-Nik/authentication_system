@@ -10,6 +10,11 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+
+/**
+ * Data class representing a request to update user information.
+ * Fields are nullable, allowing partial updates to user data (email, first name, last name).
+ */
 @Serializable
 data class UpdateUserRequest(
     val email: String? = null,
@@ -17,9 +22,23 @@ data class UpdateUserRequest(
     val lastName: String? = null
 )
 
+/**
+ * Route handler for user-related operations.
+ * Includes routes for getting, updating, and deleting user information.
+ * Each route requires JWT authentication.
+ *
+ * @param userRepository The repository used to manage user operations.
+ */
 fun Route.userRoutes(userRepository: UserRepository) {
     authenticate("auth-jwt") {
         route("/user") {
+
+            /**
+             * GET /user
+             * Retrieves information about the authenticated user.
+             * If the user is found in the database, their details are returned.
+             * Otherwise, returns a 404 Not Found response.
+             */
             get {
                 val principal = call.principal<JWTPrincipal>()
                 val username = principal!!.payload.getClaim("username").asString()
@@ -31,6 +50,12 @@ fun Route.userRoutes(userRepository: UserRepository) {
                 }
             }
 
+            /**
+             * PUT /user
+             * Updates the authenticated user's information.
+             * The request must include at least one of the updatable fields (email, first name, last name).
+             * If the user is not found, returns a 404 Not Found response.
+             */
             put {
                 val principal = call.principal<JWTPrincipal>()
                 val username = principal!!.payload.getClaim("username").asString()
@@ -52,6 +77,11 @@ fun Route.userRoutes(userRepository: UserRepository) {
                 call.respond(HttpStatusCode.OK, "User information updated")
             }
 
+            /**
+             * DELETE /user
+             * Deletes the authenticated user's account from the database.
+             * If the user is not found, returns a 404 Not Found response.
+             */
             delete {
                 val principal = call.principal<JWTPrincipal>()
                 val username = principal!!.payload.getClaim("username").asString()
