@@ -1,6 +1,6 @@
 # Authentication System
 
-This project is an authentication system built with Kotlin, Ktor, and PostgreSQL. It allows users to register, log in, update their account information, and delete their account. The system uses JWT tokens for secure authentication.
+This project is an authentication system built with Kotlin, Ktor, and PostgreSQL. It allows users to register, log in, update their account information, log out, and delete their account. The system uses JWT tokens for secure authentication.
 
 ## Features
 - User Registration
