@@ -17,14 +17,20 @@ This project is an authentication system built with Kotlin, Ktor, and PostgreSQL
 2. Open `pgAdmin` or use the command line to set up your database.
 3. Create a role and a database auth_system.
 
-### Set up environment variables
-1. DB_USER
-2. DB_PASSWORD
-3. JWT_SECRET (you can use openssl)
+### Set up environment variables and JDK
+1. DB_USER (set username of the owner of your database in PostgreSQL)
+2. DB_PASSWORD (set the password of your database)
+3. JWT_SECRET (you can use openssl for generation of the secret: ```bash openssl rand -base64 32 ```)
 
 You can use IntelliJ for that: Run -> Edit Configurations -> Environment variables.
 
+Use Oracle JDK 17.
+
 ### Build and run the application
+Run PostgreSQL and connect to your database auth_system.
+
+Run IntelliJ, build project and run main function in Application.kt.
+
 The application will be available at http://localhost:8080.
 
 ## Testing
